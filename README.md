@@ -8,11 +8,11 @@ Agentless, idempotent, portable across laptops, CI, and jump hosts.
 
 ## Core principles
 
-- **Blueprint-agnostic:** builder never interprets secrets or business logic; it only passes metadata/vars to the blueprint.
-- **JSON-first input:** a single `config.json` describes the whole system (hosts, groups, connection, per-host vars, global `blueprint_meta`).
+- **Blueprint-agnostic:** (builder passes metadata; blueprint owns logic).
+- **JSON-first input:** (`config.json` for hosts/groups/vars).
 - **Immutability:** blueprints are versioned folders (e.g., `1.0.0`), and `LATEST` is a simple text pointer.
-- **Safety nets:** validation + plan before execution; **snapshots** (retain last 100); **manifest** integrity checks (SHA256) and engine compatibility guard.
-- **Portability:** works anywhere with Go + Ansible. No agents on targets (SSH/WinRM).
+- **Safety nets:** Safety nets (validate/plan, snapshots, manifest integrity).
+- **Portability:** (Go + Ansible, agentless).
 
 ---
 
@@ -157,6 +157,23 @@ go build -o bin/unyca-builder ./src/cmd/unyca-builder
 ---
 
 ## Creating your own blueprints
+Required files under `blueprints/<system_type>/<semver>/`: `VERSION`, `MANIFEST.json`, `ansible.cfg`, `orchestrator.yml`, `servers/<group>/tasks/main.yml`.
+ssssssssssssssssssssssssssssssssssssss
+**Generate MANIFEST (Go):**
+```bash
+./bin/unyca-builder manifest --bp blueprints/<system_type>/<semver> --min-engine 0.1.0 --write
+# or:
+make manifest TYPE=<system_type> VER=<semver>
+```
+
+
+
+Notas:
+- Garante que tens o `Makefile` no root e o binário construído (`make verify` ou `go build -o bin/unyca-builder …`) antes dos comandos.
+- Mantém `LATEST` alinhado com a versão criada.
+::contentReference[oaicite:0]{index=0}
+
+
 
 **Folder:** `blueprints/<system_type>/<semver>/`  
 **Required files:**

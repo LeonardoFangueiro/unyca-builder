@@ -3,6 +3,7 @@ package ansible
 import (
 	"encoding/json"
 	"errors"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -16,6 +17,9 @@ type RunOpts struct {
 	BlueprintMeta map[string]any
 	Tags          []string
 	ExtraEnv      map[string]string
+	Check		  bool
+	Tee			  bool
+	Verbosity	  int
 }
 
 func timestamp() string { return time.Now().UTC().Format("20060102-150405Z") }
@@ -35,6 +39,11 @@ func RunServersYml(o RunOpts) error {
 	if err != nil { return err }
 	args := []string{entry, "-i", "localhost,", "-c", "local", "-e", "@" + filepath.Join(o.BuildDir, "data.json"), "-e", "blueprint_meta=" + string(metaJSON)}
 	if len(o.Tags) > 0 { args = append(args, "--tags", strings.Join(o.Tags, ",")) }
+	if o.Check { args = append(args, "--check") }
+	if o.Verbosity > 0 { 
+		if o.Verbosity > 4 { o.Verbosity = 4 } 
+		args = append(args, "-"+strings.Repeat("v", o.Verbosity)) 
+	}
 	cmd := exec.Command("ansible-playbook", args...)
 	env := os.Environ()
 	env = append(env, "UNYCA_BUILD_DIR="+o.BuildDir)
@@ -45,7 +54,9 @@ func RunServersYml(o RunOpts) error {
 	logFile := filepath.Join(o.BuildDir, "logs", "ansible-"+timestamp()+".log")
 	lf, _ := os.OpenFile(logFile, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	defer lf.Close()
-	cmd.Stdout = lf
-	cmd.Stderr = lf
+    var out io.Writer = lf
+    if o.Tee || os.Getenv("UNYCA_TEE") == "1" { out = io.MultiWriter(os.Stdout, lf) }
+	cmd.Stdout = out
+    cmd.Stderr = out
 	return cmd.Run()
 }

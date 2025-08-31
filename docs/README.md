@@ -10,6 +10,19 @@ This `docs/` tree provides file-by-file, enterprise-style documentation. Convent
 - Index lives at `docs/INDEX.md`.
 - Validation script: `docs/check-docs.sh` (fails if a code/playbook file lacks a doc).
 
+
+
+## Manifest generation (Go CLI)
+
+Use the builder itself to generate MANIFESTs (no Python deps):
+
+```bash
+./bin/unyca-builder manifest --bp blueprints/<type>/<ver> --min-engine 0.1.0 --write
+# or via Makefile
+make manifest TYPE=<type> VER=<ver>
+```
+
+
 ## How to contribute
 1. Update code and its corresponding `docs/...` file in the same PR.
 2. Keep **Purpose**, **Responsibilities**, **Data Contracts** and **Security** sections updated.

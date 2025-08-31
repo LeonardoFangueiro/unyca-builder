@@ -1,0 +1,15 @@
+{
+  "version": "1.0.1",
+  "min_engine": "0.1.0",
+  "max_engine": null,
+  "files": {
+    "VERSION": "sha256:44e161e4495cac2cf7858043e9e6418e9579f0ddcfae826f9a372622968ce066",
+    "ansible.cfg": "sha256:0ff8179e2d8487912e5fe2ec2deb90319918f5a4fa5db1477f11a1a4cd9742ff",
+    "orchestrator.yml": "sha256:68214d72668fa5e306d5b87dfb083cfc7936bf777676f478f659f0876564be86",
+    "servers/databases/tasks/main.yml": "sha256:97a4ffa6eab07d223b59052782da1b25c2fa30e84c5b88dc69af35bce18fe764",
+    "servers/apis/tasks/main.yml": "sha256:d5fcdf5ac82f24073a03c553398af35f89c0f73931afcfd8b1f1dbaa20482ab9",
+    "servers/game-nodes/tasks/main.yml": "sha256:2b0045688341cbac0856b740c193ec74e2ac0603ad22495b4dd0d6c30124a65e"
+  },
+  "signature": null,
+  "created_at": "2025-08-31T15:54:39Z"
+}

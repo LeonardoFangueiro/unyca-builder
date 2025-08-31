@@ -1,0 +1,6 @@
+---
+- name: Print blueprint_meta and host vars (apis)
+  ansible.builtin.debug:
+    msg:
+      blueprint_meta: "{{ blueprint_meta | default({}) }}"
+      host_vars: "{{ hostvars[inventory_hostname]['vars'] | default({}) }}"

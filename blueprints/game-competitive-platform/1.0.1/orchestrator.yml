@@ -1,0 +1,46 @@
+---
+- name: Load data and orchestrate roles
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - "{{ lookup('env','UNYCA_BUILD_DIR') }}/data.json"
+
+  tasks:
+    - name: Prepare SSH key file if inline (temp 0600)
+      ansible.builtin.copy:
+        dest: "/tmp/unyca_{{ item.id }}.key"
+        content: "{{ item.inline_ssh_key_b64 | b64decode }}"
+        mode: "0600"
+      loop: "{{ data }}"
+      loop_control: { label: "{{ item.id }}" }
+      when: item.inline_ssh_key_b64 is defined
+
+    - name: Add hosts dynamically
+      ansible.builtin.add_host:
+        name: "{{ item.id }}"
+        ansible_host: "{{ item.ip }}"
+        ansible_user: "{{ item.user }}"
+        ansible_connection: "{{ item.connection | default('ssh') }}"
+        ansible_python_interpreter: auto_silent
+        ansible_private_key_file: >-
+          {{ item.ssh_key if (item.ssh_key is defined)
+             else ('/tmp/unyca_' ~ item.id ~ '.key' if (item.inline_ssh_key_b64 is defined) else omit) }}
+        groups: >-
+         {{ (item.groups | default([]))
+            | map('regex_replace', '[^A-Za-z0-9_]', '_')
+            | list }}     
+        vars: "{{ item.vars | default({}) }}"
+      loop: "{{ data }}"
+      loop_control: { label: "{{ item.id }}" }
+
+- hosts: databases
+  gather_facts: false
+  roles: [ servers/databases ]
+
+- hosts: apis
+  gather_facts: false
+  roles: [ servers/apis ]
+
+- hosts: game_nodes
+  gather_facts: false
+  roles: [ servers/game-nodes ]

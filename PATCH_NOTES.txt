@@ -1,0 +1,15 @@
+Apply this ZIP at your repo root (unyca-builder/). It adds:
+- .github/pull_request_template.md
+- CHANGELOG.md
+- Makefile
+- README.md (enhanced)
+- docs updates (Go manifest generation)
+- blueprint 1.0.1 with orchestrator + ansible.cfg + roles + MANIFEST.json
+- blueprints/.../LATEST -> 1.0.1
+
+Usage after extracting:
+  make plan
+  make build
+  make run-check
+  # to bump next blueprint:
+  make bump-blueprint TYPE=game-competitive-platform CUR=1.0.1 NEW=1.0.2
