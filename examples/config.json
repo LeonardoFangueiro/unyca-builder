@@ -1,0 +1,45 @@
+{
+  "system_name": "game-cp-01",
+  "system_type": "game-competitive-platform",
+  "blueprint_meta": {
+    "region": "pt-porto",
+    "env": "prod"
+  },
+  "data": [
+    {
+      "id": "db1",
+      "ip": "10.0.0.20",
+      "user": "debian",
+      "groups": [
+        "databases"
+      ],
+      "ssh_key": "/keys/db1",
+      "vars": {
+        "pg_version": "16"
+      }
+    },
+    {
+      "id": "api1",
+      "ip": "10.0.0.30",
+      "user": "ubuntu",
+      "groups": [
+        "apis"
+      ],
+      "inline_ssh_key_b64": "LS0tLS1CRUdJTiBPUlNB...==",
+      "vars": {
+        "go_max_procs": 4
+      }
+    },
+    {
+      "id": "node1",
+      "ip": "10.0.0.40",
+      "user": "ubuntu",
+      "groups": [
+        "game-nodes"
+      ],
+      "vars": {
+        "tick_rate": 128
+      }
+    }
+  ]
+}

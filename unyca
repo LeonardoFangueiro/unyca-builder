@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$ROOT"
+command -v go >/dev/null || { echo "Go toolchain not found"; exit 1; }
+export CGO_ENABLED=0
+[[ -f go.sum ]] || go mod tidy
+exec go run ./src/cmd/unyca-builder "$@"

@@ -1,0 +1,6 @@
+- name: Demo database role — print vars
+  ansible.builtin.debug:
+    msg:
+      - "DB host: {{ inventory_hostname }}"
+      - "Blueprint meta: {{ blueprint_meta | default({}) }}"
+      - "Host vars: {{ hostvars[inventory_hostname]['vars'] | default({}) }}"

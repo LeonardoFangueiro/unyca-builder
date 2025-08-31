@@ -1,0 +1,6 @@
+- name: Demo game node role — print vars
+  ansible.builtin.debug:
+    msg:
+      - "Game node: {{ inventory_hostname }}"
+      - "Blueprint meta: {{ blueprint_meta | default({}) }}"
+      - "Host vars: {{ hostvars[inventory_hostname]['vars'] | default({}) }}"

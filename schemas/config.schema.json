@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Unyca Builder Config",
+  "type": "object",
+  "required": [
+    "system_name",
+    "system_type",
+    "data"
+  ],
+  "properties": {
+    "system_name": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{2,63}$"
+    },
+    "system_type": {
+      "type": "string",
+      "const": "game-competitive-platform"
+    },
+    "blueprint_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "blueprint_meta": {
+      "type": "object"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "ip",
+          "user",
+          "groups"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_-]{1,64}$"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ssh_key": {
+            "type": "string"
+          },
+          "inline_ssh_key_b64": {
+            "type": "string"
+          },
+          "connection": {
+            "type": "string",
+            "enum": [
+              "ssh",
+              "winrm"
+            ],
+            "default": "ssh"
+          },
+          "vars": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}
